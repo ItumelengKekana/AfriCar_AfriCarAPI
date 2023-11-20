@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34302.85
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AfriCar_AfriCarAPI", "AfriCar_AfriCarAPI\AfriCar_AfriCarAPI.csproj", "{86C692DA-E776-4DFF-8F40-13B808D48B2D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{86C692DA-E776-4DFF-8F40-13B808D48B2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86C692DA-E776-4DFF-8F40-13B808D48B2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86C692DA-E776-4DFF-8F40-13B808D48B2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86C692DA-E776-4DFF-8F40-13B808D48B2D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {26B59FFF-3CDF-4CFD-865F-DA8AB8C826E0}
+	EndGlobalSection
+EndGlobal
