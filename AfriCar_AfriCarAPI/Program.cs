@@ -1,3 +1,4 @@
+using AfriCar_AfriCarAPI;
 using AfriCar_AfriCarAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +11,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 	option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
 
+builder.Services.AddAutoMapper(typeof(MappingConfig));
+
 builder.Services.AddControllers(option =>
 {
-	option.ReturnHttpNotAcceptable = true;  //prevent the return type from being anything other than JSON
+	//option.ReturnHttpNotAcceptable = true;  //prevent the return type from being anything other than JSON
 }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();  //Adding support for xml data format
 																  // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
