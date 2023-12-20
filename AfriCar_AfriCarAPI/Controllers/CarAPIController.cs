@@ -1,11 +1,13 @@
 ﻿using AfriCar_AfriCarAPI.Data;
 using AfriCar_AfriCarAPI.Models;
 using AfriCar_AfriCarAPI.Models.Dto;
+using AfriCar_AfriCarAPI.Repository.IRepository;
 using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace AfriCar_AfriCarAPI.Controllers
 {
@@ -13,22 +15,36 @@ namespace AfriCar_AfriCarAPI.Controllers
 	[ApiController]
 	public class CarAPIController : ControllerBase
 	{
-		private readonly ApplicationDbContext _db;
+		protected APIResponse _response;
+		private readonly ICarRepository _dbCar;
 		private readonly IMapper _mapper;
 
-        public CarAPIController(ApplicationDbContext db, IMapper mapper)
-        {
-            _db = db;
+		public CarAPIController(ICarRepository dbCar, IMapper mapper)
+		{
+			_dbCar = dbCar;
 			_mapper = mapper;
-        }
+			this._response = new();
+		}
 
 		//GET
-        [HttpGet]
+		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		public async Task<ActionResult<IEnumerable<CarDTO>>> GetCars()
+		public async Task<ActionResult<APIResponse>> GetCars()
 		{
-			IEnumerable<CarModel> carList = await _db.Cars.ToListAsync();
-			return Ok(_mapper.Map<List<CarDTO>>(carList));
+			try
+			{
+
+				IEnumerable<CarModel> carList = await _dbCar.GetAllAsync();
+				_response.Result = _mapper.Map<List<CarDTO>>(carList);
+				_response.StatusCode = HttpStatusCode.OK;
+				return Ok(_response);
+			}
+			catch (Exception ex)
+			{
+				_response.isSuccess = false;
+				_response.ErrorMessages = new List<string> { ex.ToString() };
+			}
+			return _response;
 		}
 
 		//GET Individual
@@ -36,21 +52,24 @@ namespace AfriCar_AfriCarAPI.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<CarDTO>> GetCar(int id)
+		public async Task<ActionResult<APIResponse>> GetCar(int id)
 		{
-			if(id == 0)
+			if (id == 0)
 			{
-				return BadRequest();
+				_response.StatusCode = HttpStatusCode.BadRequest;
+				return BadRequest(_response);
 			}
 
-			var car = await _db.Cars.FirstOrDefaultAsync(x => x.Id == id);
+			var car = await _dbCar.GetAsync(x => x.Id == id);
 
-			if(car == null)
+			if (car == null)
 			{
 				return NotFound();
 			}
 
-			return Ok(_mapper.Map<CarDTO>(car));
+			_response.Result = _mapper.Map<CarDTO>(car);
+			_response.StatusCode = HttpStatusCode.OK;
+			return Ok(_response);
 		}
 
 
@@ -60,41 +79,37 @@ namespace AfriCar_AfriCarAPI.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-		public async Task<ActionResult<CarDTO>> CreateCar([FromBody]CarCreateDTO createDTO)
+		public async Task<ActionResult<APIResponse>> CreateCar([FromBody] CarCreateDTO createDTO)
 		{
-			if(await _db.Cars.FirstOrDefaultAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
+			try
 			{
-				ModelState.AddModelError("CustomError", "Car already exists");
-				return BadRequest(ModelState);
+
+
+				if (await _dbCar.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
+				{
+					ModelState.AddModelError("CustomError", "Car already exists");
+					return BadRequest(ModelState);
+				}
+
+				if (createDTO == null)
+				{
+					return BadRequest(createDTO);
+				}
+
+				CarModel carModel = _mapper.Map<CarModel>(createDTO);
+
+				await _dbCar.CreateAsync(carModel);
+				_response.Result = _mapper.Map<CarDTO>(carModel);
+				_response.StatusCode = HttpStatusCode.Created;
+
+				return CreatedAtRoute("GetCar", new { id = carModel.Id }, _response);
 			}
-
-			if(createDTO == null)
+			catch (Exception ex)
 			{
-				return BadRequest(createDTO);
+				_response.isSuccess = false;
+				_response.ErrorMessages = new List<string> { ex.ToString() };
 			}
-			/*if(createDTO.Id == 0)
-			{
-				return StatusCode(StatusCodes.Status500InternalServerError);
-			}*/
-
-			/*CarModel carModel = new()
-			{
-				Name = car.Name,
-				Details = car.Details,
-				Id = car.Id,
-				ImageUrl = car.ImageUrl,
-				Occupancy = car.Occupancy,
-				Rate = car.Rate,
-				ReleaseYear = car.ReleaseYear,
-				Classification = car.Classification,
-			};*/
-
-			CarModel carModel = _mapper.Map<CarModel>(createDTO);
-
-			await _db.Cars.AddAsync(carModel);
-			await _db.SaveChangesAsync();
-
-			return CreatedAtRoute("GetCar", new {id = carModel.Id}, carModel);
+			return _response;
 		}
 
 
@@ -103,23 +118,33 @@ namespace AfriCar_AfriCarAPI.Controllers
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> DeleteCar(int id)
+		public async Task<ActionResult<APIResponse>> DeleteCar(int id)
 		{
-			if (id == 0)
+			try
 			{
-				return BadRequest(); //returns a status of 400 if id is 0
+				if (id == 0)
+				{
+					return BadRequest(); //returns a status of 400 if id is 0
+				}
+
+				var car = await _dbCar.GetAsync(u => u.Id == id); //link expression to find the item using the id
+
+				if (car == null)
+				{
+					return NotFound(); //returns a status of 404 if the id does not match
+				}
+
+				await _dbCar.RemoveAsync(car); //remove the selected item
+				_response.StatusCode = HttpStatusCode.NoContent;
+				_response.isSuccess = true;
+				return Ok(_response);
 			}
-
-			var car = await _db.Cars.FirstOrDefaultAsync(u => u.Id == id); //link expression to find the item using the id
-
-			if (car == null)
+			catch (Exception ex)
 			{
-				return NotFound(); //returns a status of 404 if the id does not match
+				_response.isSuccess = false;
+				_response.ErrorMessages = new List<string> { ex.ToString() };
 			}
-
-			_db.Cars.Remove(car); //remove the selected item
-			await _db.SaveChangesAsync();
-			return NoContent(); //returns a 204 No Content response instead of Ok (preference)
+			return _response;
 		}
 
 
@@ -128,31 +153,29 @@ namespace AfriCar_AfriCarAPI.Controllers
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-		public async Task<IActionResult> UpdateCar(int id, [FromBody] CarUpdateDTO updateDTO)
+		public async Task<ActionResult<APIResponse>> UpdateCar(int id, [FromBody] CarUpdateDTO updateDTO)
 		{
-			if (updateDTO == null || id != updateDTO.Id)
+			try
 			{
-				return BadRequest();
+
+				if (updateDTO == null || id != updateDTO.Id)
+				{
+					return BadRequest();
+				}
+
+				CarModel model = _mapper.Map<CarModel>(updateDTO);
+
+				await _dbCar.UpdateAsync(model);
+				_response.StatusCode = HttpStatusCode.OK;
+				_response.isSuccess = true;
+				return Ok(_response);
 			}
-
-			/*CarModel carModel = new()
+			catch (Exception ex)
 			{
-				Name = car.Name,
-				Details = car.Details,
-				Id = car.Id,
-				ImageUrl = car.ImageUrl,
-				Occupancy = car.Occupancy,
-				Rate = car.Rate,
-				ReleaseYear = car.ReleaseYear,
-				Classification = car.Classification,
-			};*/
-
-			CarModel model = _mapper.Map<CarModel>(updateDTO);
-
-			_db.Cars.Update(model);
-			await _db.SaveChangesAsync();
-
-			return NoContent();
+				_response.isSuccess = false;
+				_response.ErrorMessages = new List<string> { ex.ToString() };
+			}
+			return _response;
 		}
 
 
@@ -168,24 +191,12 @@ namespace AfriCar_AfriCarAPI.Controllers
 				return BadRequest();
 			}
 
-			var car = await _db.Cars.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
-
-			/*CarModel carModel = new()
-			{
-				Name = car.Name,
-				Details = car.Details,
-				Id = car.Id,
-				ImageUrl = car.ImageUrl,
-				Occupancy = car.Occupancy,
-				Rate = car.Rate,
-				ReleaseYear = car.ReleaseYear,
-				Classification = car.Classification,
-			};*/
+			var car = await _dbCar.GetAsync(x => x.Id == id, tracked: false);
 
 			CarUpdateDTO carUpdateDTO = _mapper.Map<CarUpdateDTO>(car);
 
 
-			if(car == null)
+			if (car == null)
 			{
 				return BadRequest();
 			}
@@ -196,9 +207,8 @@ namespace AfriCar_AfriCarAPI.Controllers
 			CarModel carModel = _mapper.Map<CarModel>(carUpdateDTO);
 
 
-			_db.Cars.Update(carModel);  //updating the appropriate model bound to the database
-			await _db.SaveChangesAsync();
-
+			await _dbCar.UpdateAsync(carModel);  //updating the appropriate model bound to the database
+			
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);

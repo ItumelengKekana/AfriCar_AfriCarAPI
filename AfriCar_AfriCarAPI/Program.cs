@@ -1,5 +1,7 @@
 using AfriCar_AfriCarAPI;
 using AfriCar_AfriCarAPI.Data;
+using AfriCar_AfriCarAPI.Repository;
+using AfriCar_AfriCarAPI.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
 	option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
+
+builder.Services.AddScoped<ICarRepository, CarRepository>();
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
