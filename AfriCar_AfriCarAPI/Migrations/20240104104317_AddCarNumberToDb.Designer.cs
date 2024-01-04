@@ -4,6 +4,7 @@ using AfriCar_AfriCarAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AfriCar_AfriCarAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240104104317_AddCarNumberToDb")]
+    partial class AddCarNumberToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,7 +75,7 @@ namespace AfriCar_AfriCarAPI.Migrations
                         {
                             Id = 1,
                             Classification = "Sedan",
-                            CreatedDate = new DateTime(2024, 1, 4, 13, 23, 0, 412, DateTimeKind.Local).AddTicks(849),
+                            CreatedDate = new DateTime(2024, 1, 4, 12, 43, 17, 93, DateTimeKind.Local).AddTicks(1332),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475328/DotNet%20API/hxsu50sgmt5onrl3p1p8.jpg",
                             Name = "Toyota Corolla",
@@ -85,7 +88,7 @@ namespace AfriCar_AfriCarAPI.Migrations
                         {
                             Id = 2,
                             Classification = "SUV",
-                            CreatedDate = new DateTime(2024, 1, 4, 13, 23, 0, 412, DateTimeKind.Local).AddTicks(861),
+                            CreatedDate = new DateTime(2024, 1, 4, 12, 43, 17, 93, DateTimeKind.Local).AddTicks(1346),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475327/DotNet%20API/sopj1bycevitusiddh0n.jpg",
                             Name = "Ford Explorer",
@@ -98,7 +101,7 @@ namespace AfriCar_AfriCarAPI.Migrations
                         {
                             Id = 3,
                             Classification = "Convertible",
-                            CreatedDate = new DateTime(2024, 1, 4, 13, 23, 0, 412, DateTimeKind.Local).AddTicks(863),
+                            CreatedDate = new DateTime(2024, 1, 4, 12, 43, 17, 93, DateTimeKind.Local).AddTicks(1349),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475327/DotNet%20API/zq2f27omunuan1lba1tg.jpg",
                             Name = "Ford Mustang",
@@ -111,7 +114,7 @@ namespace AfriCar_AfriCarAPI.Migrations
                         {
                             Id = 4,
                             Classification = "Sedan",
-                            CreatedDate = new DateTime(2024, 1, 4, 13, 23, 0, 412, DateTimeKind.Local).AddTicks(865),
+                            CreatedDate = new DateTime(2024, 1, 4, 12, 43, 17, 93, DateTimeKind.Local).AddTicks(1350),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475328/DotNet%20API/l5zxmoivfspke86qmu9b.jpg",
                             Name = "Chrysler 300",
@@ -124,7 +127,7 @@ namespace AfriCar_AfriCarAPI.Migrations
                         {
                             Id = 5,
                             Classification = "Sedan",
-                            CreatedDate = new DateTime(2024, 1, 4, 13, 23, 0, 412, DateTimeKind.Local).AddTicks(867),
+                            CreatedDate = new DateTime(2024, 1, 4, 12, 43, 17, 93, DateTimeKind.Local).AddTicks(1352),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475328/DotNet%20API/nhobn79bdvgoasgwtxvt.jpg",
                             Name = "Volkswagen Jetta",
@@ -140,9 +143,6 @@ namespace AfriCar_AfriCarAPI.Migrations
                     b.Property<int>("CarNo")
                         .HasColumnType("int");
 
-                    b.Property<int>("CarID")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -155,20 +155,7 @@ namespace AfriCar_AfriCarAPI.Migrations
 
                     b.HasKey("CarNo");
 
-                    b.HasIndex("CarID");
-
                     b.ToTable("CarNumbers");
-                });
-
-            modelBuilder.Entity("AfriCar_AfriCarAPI.Models.CarNumberModel", b =>
-                {
-                    b.HasOne("AfriCar_AfriCarAPI.Models.CarModel", "Car")
-                        .WithMany()
-                        .HasForeignKey("CarID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Car");
                 });
 #pragma warning restore 612, 618
         }

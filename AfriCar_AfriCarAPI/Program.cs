@@ -14,6 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 });
 
 builder.Services.AddScoped<ICarRepository, CarRepository>();
+builder.Services.AddScoped<ICarNumberRepository, CarNumberRepository>();
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
