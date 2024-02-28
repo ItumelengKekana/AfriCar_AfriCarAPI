@@ -5,7 +5,9 @@ VisualStudioVersion = 17.7.34302.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AfriCar_AfriCarAPI", "AfriCar_AfriCarAPI\AfriCar_AfriCarAPI.csproj", "{86C692DA-E776-4DFF-8F40-13B808D48B2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AfriCar_Web", "AfriCar_Web\AfriCar_Web.csproj", "{6D832C03-7F2D-41FD-A12E-97FF5C0EED7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AfriCar_Web", "AfriCar_Web\AfriCar_Web.csproj", "{6D832C03-7F2D-41FD-A12E-97FF5C0EED7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AfriCar_Utility", "AfriCar_Utility\AfriCar_Utility.csproj", "{5D540781-2D57-4743-9A0D-81F9B3B9C775}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6D832C03-7F2D-41FD-A12E-97FF5C0EED7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D832C03-7F2D-41FD-A12E-97FF5C0EED7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D832C03-7F2D-41FD-A12E-97FF5C0EED7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D540781-2D57-4743-9A0D-81F9B3B9C775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D540781-2D57-4743-9A0D-81F9B3B9C775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D540781-2D57-4743-9A0D-81F9B3B9C775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D540781-2D57-4743-9A0D-81F9B3B9C775}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

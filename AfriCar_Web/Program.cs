@@ -1,7 +1,16 @@
+using AfriCar_Web;
+using AfriCar_Web.Services;
+using AfriCar_Web.Services.IServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+builder.Services.AddHttpClient<ICarService, CarService>();
+builder.Services.AddScoped<ICarService, CarService>();
 
 var app = builder.Build();
 
