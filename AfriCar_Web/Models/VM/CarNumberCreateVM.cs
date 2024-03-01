@@ -14,6 +14,6 @@ namespace AfriCar_Web.Models.VM
 		public CarNumberCreateDTO CarNumber { get; set; }
 
 		[ValidateNever]
-		public IEnumerable<SelectListItem> VillaList { get; set; }
+		public IEnumerable<SelectListItem> CarList { get; set; }
 	}
 }

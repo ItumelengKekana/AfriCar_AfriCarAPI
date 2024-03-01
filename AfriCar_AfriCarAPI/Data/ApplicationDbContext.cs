@@ -20,11 +20,11 @@ namespace AfriCar_AfriCarAPI.Data
 				{
 					Id = 1,
 					Name = "Toyota Corolla",
-					Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
+					TransmissionType = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
 					ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475328/DotNet%20API/hxsu50sgmt5onrl3p1p8.jpg",
 					Occupancy = 4,
 					Rate = 200,
-					ReleaseYear = "2018",
+					ReleaseYear = new DateTime(2018, 01, 01),
 					Classification = "Sedan",
 					CreatedDate = DateTime.Now
 				},
@@ -32,11 +32,11 @@ namespace AfriCar_AfriCarAPI.Data
 				{
 					Id = 2,
 					Name = "Ford Explorer",
-					Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
+					TransmissionType = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
 					ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475327/DotNet%20API/sopj1bycevitusiddh0n.jpg",
 					Occupancy = 4,
 					Rate = 500,
-					ReleaseYear = "2019",
+					ReleaseYear = new DateTime(2019, 02, 01),
 					Classification = "SUV",
 					CreatedDate = DateTime.Now
 				},
@@ -44,11 +44,11 @@ namespace AfriCar_AfriCarAPI.Data
 				{
 					Id = 3,
 					Name = "Ford Mustang",
-					Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
+					TransmissionType = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
 					ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475327/DotNet%20API/zq2f27omunuan1lba1tg.jpg",
 					Occupancy = 2,
 					Rate = 200,
-					ReleaseYear = "2019",
+					ReleaseYear = new DateTime(2019, 03, 01),
 					Classification = "Convertible",
 					CreatedDate = DateTime.Now
 				},
@@ -56,11 +56,11 @@ namespace AfriCar_AfriCarAPI.Data
 				{
 					Id = 4,
 					Name = "Chrysler 300",
-					Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
+					TransmissionType = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
 					ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475328/DotNet%20API/l5zxmoivfspke86qmu9b.jpg",
 					Occupancy = 4,
 					Rate = 300,
-					ReleaseYear = "2014",
+					ReleaseYear = new DateTime(2014, 04, 05),
 					Classification = "Sedan",
 					CreatedDate = DateTime.Now
 				},
@@ -68,11 +68,11 @@ namespace AfriCar_AfriCarAPI.Data
 				{
 					Id = 5,
 					Name = "Volkswagen Jetta",
-					Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
+					TransmissionType = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
 					ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475328/DotNet%20API/nhobn79bdvgoasgwtxvt.jpg",
 					Occupancy = 4,
 					Rate = 290,
-					ReleaseYear = "2017",
+					ReleaseYear = new DateTime(2017, 05, 01),
 					Classification = "Sedan",
 					CreatedDate = DateTime.Now
 				}

@@ -11,13 +11,12 @@ namespace AfriCar_Web.Models.Dto
 		[MaxLength(30)]
 		public string Name { get; set; }
 
-		[MaxLength(4)]
-		public string ReleaseYear { get; set; }
+		public DateTime ReleaseYear { get; set; }
 
 		[Required]
 		public int Occupancy { get; set; }
 
-		public string Details { get; set; }
+		public string TransmissionType { get; set; }
 
 		[Required]
 		public double Rate { get; set; }

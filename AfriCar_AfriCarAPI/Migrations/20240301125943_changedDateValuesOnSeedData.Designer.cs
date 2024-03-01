@@ -4,6 +4,7 @@ using AfriCar_AfriCarAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AfriCar_AfriCarAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240301125943_changedDateValuesOnSeedData")]
+    partial class changedDateValuesOnSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +39,9 @@ namespace AfriCar_AfriCarAPI.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Details")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -51,9 +57,6 @@ namespace AfriCar_AfriCarAPI.Migrations
                     b.Property<DateTime>("ReleaseYear")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TransmissionType")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
@@ -66,65 +69,65 @@ namespace AfriCar_AfriCarAPI.Migrations
                         {
                             Id = 1,
                             Classification = "Sedan",
-                            CreatedDate = new DateTime(2024, 3, 1, 15, 14, 50, 896, DateTimeKind.Local).AddTicks(6086),
+                            CreatedDate = new DateTime(2024, 3, 1, 14, 59, 43, 744, DateTimeKind.Local).AddTicks(1103),
+                            Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475328/DotNet%20API/hxsu50sgmt5onrl3p1p8.jpg",
                             Name = "Toyota Corolla",
                             Occupancy = 4,
                             Rate = 200.0,
                             ReleaseYear = new DateTime(2018, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TransmissionType = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
                             Classification = "SUV",
-                            CreatedDate = new DateTime(2024, 3, 1, 15, 14, 50, 896, DateTimeKind.Local).AddTicks(6097),
+                            CreatedDate = new DateTime(2024, 3, 1, 14, 59, 43, 744, DateTimeKind.Local).AddTicks(1114),
+                            Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475327/DotNet%20API/sopj1bycevitusiddh0n.jpg",
                             Name = "Ford Explorer",
                             Occupancy = 4,
                             Rate = 500.0,
                             ReleaseYear = new DateTime(2019, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TransmissionType = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
                             Classification = "Convertible",
-                            CreatedDate = new DateTime(2024, 3, 1, 15, 14, 50, 896, DateTimeKind.Local).AddTicks(6098),
+                            CreatedDate = new DateTime(2024, 3, 1, 14, 59, 43, 744, DateTimeKind.Local).AddTicks(1115),
+                            Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475327/DotNet%20API/zq2f27omunuan1lba1tg.jpg",
                             Name = "Ford Mustang",
                             Occupancy = 2,
                             Rate = 200.0,
                             ReleaseYear = new DateTime(2019, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TransmissionType = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 4,
                             Classification = "Sedan",
-                            CreatedDate = new DateTime(2024, 3, 1, 15, 14, 50, 896, DateTimeKind.Local).AddTicks(6100),
+                            CreatedDate = new DateTime(2024, 3, 1, 14, 59, 43, 744, DateTimeKind.Local).AddTicks(1117),
+                            Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475328/DotNet%20API/l5zxmoivfspke86qmu9b.jpg",
                             Name = "Chrysler 300",
                             Occupancy = 4,
                             Rate = 300.0,
                             ReleaseYear = new DateTime(2014, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TransmissionType = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 5,
                             Classification = "Sedan",
-                            CreatedDate = new DateTime(2024, 3, 1, 15, 14, 50, 896, DateTimeKind.Local).AddTicks(6102),
+                            CreatedDate = new DateTime(2024, 3, 1, 14, 59, 43, 744, DateTimeKind.Local).AddTicks(1119),
+                            Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://res.cloudinary.com/dkscwnhd9/image/upload/v1700475328/DotNet%20API/nhobn79bdvgoasgwtxvt.jpg",
                             Name = "Volkswagen Jetta",
                             Occupancy = 4,
                             Rate = 290.0,
                             ReleaseYear = new DateTime(2017, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TransmissionType = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
