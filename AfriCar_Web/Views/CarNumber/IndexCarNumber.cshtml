@@ -1,0 +1,36 @@
+﻿@model IEnumerable<AfriCar_Web.Models.Dto.CarNumberDTO>
+
+<br />
+<div class="container p-4 border">
+	<div class="row pb-2">
+		<div class="col">
+			<h1 class="text-primary">Car Number List</h1>
+		</div>
+		<div class="col text-end pt-1">
+			<a asp-controller="CarNumber" asp-action="CreateCarNumber" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i> Create New Car Number</a>
+		</div>
+	</div>
+
+	<table class="table">
+		<thead>
+			<tr class="table-dark">
+				<th>Car Name</th>
+				<th>Car Number</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr class="table-dark">
+					<td>@item.Car.Name</td>
+					<td>@item.CarNo</td>
+					<td>
+						<a asp-controller="CarNumber" asp-action="UpdateCarNumber" asp-route-carNo="@item.CarNo" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+						<a asp-controller="CarNumber" asp-action="DeleteCarNumber" asp-route-carNo="@item.CarNo" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

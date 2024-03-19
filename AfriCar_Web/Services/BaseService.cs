@@ -52,6 +52,26 @@ namespace AfriCar_Web.Services
 				apiResponse = await client.SendAsync(message);
 
 				var apiContent = await apiResponse.Content.ReadAsStringAsync();
+
+				try
+				{
+					APIResponse ApiResponse = JsonConvert.DeserializeObject<APIResponse>(apiContent);
+
+					if (apiResponse.StatusCode == System.Net.HttpStatusCode.BadRequest || apiResponse.StatusCode == System.Net.HttpStatusCode.NotFound)
+					{
+						ApiResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+						ApiResponse.isSuccess = false;
+						var res = JsonConvert.SerializeObject(ApiResponse);
+						var returnObject = JsonConvert.DeserializeObject<T>(res);
+						return returnObject;
+					}
+				}
+				catch (Exception ex)
+				{
+					var exceptionResponse = JsonConvert.DeserializeObject<T>(apiContent);
+					return exceptionResponse;
+				}
+
 				var APIResponse = JsonConvert.DeserializeObject<T>(apiContent);
 
 				return APIResponse;

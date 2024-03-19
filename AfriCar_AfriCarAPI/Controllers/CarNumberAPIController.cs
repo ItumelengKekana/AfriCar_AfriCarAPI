@@ -36,7 +36,7 @@ namespace AfriCar_AfriCarAPI.Controllers
 			try
 			{
 
-				IEnumerable<CarNumberModel> carList = await _dbCarNumber.GetAllAsync();
+				IEnumerable<CarNumberModel> carList = await _dbCarNumber.GetAllAsync(includeProperties: "Car");
 				_response.Result = _mapper.Map<List<CarNumberDTO>>(carList);
 				_response.StatusCode = HttpStatusCode.OK;
 				return Ok(_response);
@@ -50,7 +50,7 @@ namespace AfriCar_AfriCarAPI.Controllers
 		}
 
 		//GET Individual
-		[HttpGet("id", Name = "GetCarNumber")] //This implies that an id is needed to avoid an ambiguity error
+		[HttpGet("{id:int}", Name = "GetCarNumber")] //This implies that an id is needed to avoid an ambiguity error
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -89,13 +89,13 @@ namespace AfriCar_AfriCarAPI.Controllers
 
 				if (await _dbCarNumber.GetAsync(u => u.CarNo == createDTO.CarNo) != null)
 				{
-					ModelState.AddModelError("CustomError", "Car Number already exists");
+					ModelState.AddModelError("ErrorMessages", "Car Number already exists");
 					return BadRequest(ModelState);
 				}
 
 				if (await _dbCar.GetAsync(u => u.Id == createDTO.CarID) == null)
 				{
-					ModelState.AddModelError("CustomError", "Car ID is invalid!");
+					ModelState.AddModelError("ErrorMessages", "Car ID is invalid!");
 					return BadRequest(ModelState);
 				}
 

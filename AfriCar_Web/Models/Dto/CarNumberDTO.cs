@@ -10,5 +10,7 @@ namespace AfriCar_Web.Models.Dto
 		[Required]
 		public int CarID { get; set; }
 		public string SpecialDetails { get; set; }
+
+		public CarDTO Car { get; set; }
 	}
 }

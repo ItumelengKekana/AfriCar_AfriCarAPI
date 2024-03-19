@@ -1,8 +1,42 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using Microsoft.AspNetCore.Components
+@model IEnumerable<AfriCar_Web.Models.Dto.CarDTO>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<img class="d-block w-100 px-2" src="images/home/slide1.jpg" alt="Default Villa Image" />
+
+<hr />
+<div class="row" style="--bs-gutter-x:0">
+	@foreach (var car in Model)
+	{
+		<div class="p-4 col-md-12 col-lg-6">
+			<div class="row" style="border-radius:20px; border: 1px solid #ffffff">
+				<div class="col-4">
+					<img class="d-block w-100" style="border-radius:20px;" src="@car.ImageUrl" alt="First slide">
+				</div>
+				<div class="col-8">
+					<p class="card-title text-warning" style="font-size:xx-large">@car.Name</p>
+					<p class="card-text">
+						@((MarkupString)car.TransmissionType)
+					</p>
+				</div>
+				<div class="col-12">
+					<div class="row pb-3 pt-2">
+						<div class="col-4">
+							<a href="" class="btn btn-success form-control btn-block">Book</a>
+						</div>
+						<div class="col-4">
+							<span class="">Max Occupancy : @car.Occupancy seats </span><br />
+							<span class=" pt-1">Car Type : @car.Classification </span><br />
+						</div>
+						<div class="col-4">
+							<span class="text-warning float-end font-weight-bold pt-1" style="font-size:25px;">
+								<span style="border-bottom:1px solid #ff6a00">
+									@car.Rate.ToString("c")
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
 </div>

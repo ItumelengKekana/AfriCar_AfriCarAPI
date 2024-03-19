@@ -12,6 +12,9 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddHttpClient<ICarService, CarService>();
 builder.Services.AddScoped<ICarService, CarService>();
 
+builder.Services.AddHttpClient<ICarNumberService, CarNumberService>();
+builder.Services.AddScoped<ICarNumberService, CarNumberService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

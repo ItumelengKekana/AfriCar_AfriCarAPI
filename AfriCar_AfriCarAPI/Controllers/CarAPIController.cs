@@ -48,7 +48,7 @@ namespace AfriCar_AfriCarAPI.Controllers
 		}
 
 		//GET Individual
-		[HttpGet("id", Name = "GetCar")] //This implies that an id is needed to avoid an ambiguity error
+		[HttpGet("{id:int}", Name = "GetCar")] //This implies that an id is needed to avoid an ambiguity error
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -208,7 +208,7 @@ namespace AfriCar_AfriCarAPI.Controllers
 
 
 			await _dbCar.UpdateAsync(carModel);  //updating the appropriate model bound to the database
-			
+
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);

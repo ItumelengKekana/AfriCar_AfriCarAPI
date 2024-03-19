@@ -1,0 +1,83 @@
+﻿@model AfriCar_Web.Models.Dto.CarDTO
+
+<form asp-action="DeleteCar">
+	<br />
+	<div class="container border p-3">
+		<h1 class="text-primary">Delete Car</h1>
+		<hr />
+
+		<input hidden asp-for="Id" />
+		<div class="row">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+			<div class="col-2">
+				<label asp-for="Name" class="control-label pt-2" style="font-size:20px;"></label>
+			</div>
+			<div class="col-10 pb-3">
+				<input class="form-control" asp-for="Name" disabled />
+				<span asp-validation-for="Name" class="text-danger"></span>
+			</div>
+
+			<div class="col-2">
+				<label asp-for="TransmissionType" class="control-label pt-2" style="font-size:20px;">Transmission Type</label>
+			</div>
+			<div class="col-10 pb-3">
+				<input class="form-control" asp-for="TransmissionType" disabled />
+				<span asp-validation-for="TransmissionType" class="text-danger"></span>
+			</div>
+
+			<div class="col-2">
+				<label asp-for="ImageUrl" class="control-label pt-2" style="font-size:20px;"></label>
+			</div>
+			<div class="col-10 pb-3">
+				<input class="form-control" asp-for="ImageUrl" disabled />
+				<span asp-validation-for="ImageUrl" class="text-danger"></span>
+			</div>
+
+			<div class="col-2">
+				<label asp-for="Rate" class="control-label pt-2" style="font-size:20px;"></label>
+			</div>
+			<div class="col-10 pb-3">
+				<input class="form-control" asp-for="Rate" disabled />
+				<span asp-validation-for="Rate" class="text-danger"></span>
+			</div>
+
+			<div class="col-2">
+				<label asp-for="Occupancy" class="control-label pt-2" style="font-size:20px;"></label>
+			</div>
+			<div class="col-10 pb-3">
+				<input class="form-control" asp-for="Occupancy" disabled />
+				<span asp-validation-for="Occupancy" class="text-danger"></span>
+			</div>
+
+			<div class="col-2">
+				<label asp-for="Classification" class="control-label pt-2" style="font-size:20px;"></label>
+			</div>
+			<div class="col-10 pb-3">
+				<input class="form-control" asp-for="Classification" disabled />
+				<span asp-validation-for="Classification" class="text-danger"></span>
+			</div>
+
+			<div class="col-2">
+				<label asp-for="ReleaseYear" class="control-label pt-2" style="font-size:20px;"></label>
+			</div>
+			<div class="col-10 pb-3">
+				<input class="form-control" asp-for="ReleaseYear" disabled />
+				<span asp-validation-for="ReleaseYear" class="text-danger"></span>
+			</div>
+
+			<div class="col-5 offset-2">
+				<a asp-action="IndexCar" asp-controller="Car" class="btn btn-primary form-control">Back to List</a>
+			</div>
+			<div class="col-5">
+				<input type="submit" value="Delete" class="btn btn-success form-control" />
+			</div>
+
+		</div>
+	</div>
+
+</form>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
