@@ -3,6 +3,7 @@ using AfriCar_AfriCarAPI.Models;
 using AfriCar_AfriCarAPI.Models.Dto;
 using AfriCar_AfriCarAPI.Repository.IRepository;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,9 @@ namespace AfriCar_AfriCarAPI.Controllers
 		//GET
 		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult<APIResponse>> GetCars()
 		{
 			try
@@ -52,6 +56,8 @@ namespace AfriCar_AfriCarAPI.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult<APIResponse>> GetCar(int id)
 		{
 			if (id == 0)
@@ -75,8 +81,10 @@ namespace AfriCar_AfriCarAPI.Controllers
 
 		//CREATE POST
 		[HttpPost]
+		[Authorize(Roles = "admin")]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
 		public async Task<ActionResult<APIResponse>> CreateCar([FromBody] CarCreateDTO createDTO)
@@ -115,8 +123,10 @@ namespace AfriCar_AfriCarAPI.Controllers
 
 		//DELETE
 		[HttpDelete("{id:int}", Name = "DeleteCar")]
+		[Authorize(Roles = "admin")]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<APIResponse>> DeleteCar(int id)
 		{
@@ -149,9 +159,12 @@ namespace AfriCar_AfriCarAPI.Controllers
 
 
 		//PUT
+		[Authorize(Roles = "admin")]
 		[HttpPut("{id:int}", Name = "UpdateCar")]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 
 		public async Task<ActionResult<APIResponse>> UpdateCar(int id, [FromBody] CarUpdateDTO updateDTO)
 		{
@@ -180,7 +193,7 @@ namespace AfriCar_AfriCarAPI.Controllers
 
 
 		//PATCH
-
+		[Authorize(Roles = "admin")]
 		[HttpPatch("{id:int}", Name = "UpdatePartialCar")]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]

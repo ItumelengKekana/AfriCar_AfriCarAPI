@@ -12,6 +12,7 @@ namespace AfriCar_AfriCarAPI.Data
 
 		public DbSet<CarModel> Cars { get; set; }
 		public DbSet<CarNumberModel> CarNumbers { get; set; }
+		public DbSet<LocalUser> LocalUsers { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

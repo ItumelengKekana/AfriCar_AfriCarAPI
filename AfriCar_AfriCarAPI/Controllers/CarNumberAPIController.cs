@@ -3,6 +3,7 @@ using AfriCar_AfriCarAPI.Models;
 using AfriCar_AfriCarAPI.Models.Dto;
 using AfriCar_AfriCarAPI.Repository.IRepository;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -76,9 +77,11 @@ namespace AfriCar_AfriCarAPI.Controllers
 
 
 		//CREATE POST
+		[Authorize(Roles = "admin")]
 		[HttpPost]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
 		public async Task<ActionResult<APIResponse>> CreateCarNumber([FromBody] CarNumberCreateDTO createDTO)
@@ -122,9 +125,11 @@ namespace AfriCar_AfriCarAPI.Controllers
 
 
 		//DELETE
+		[Authorize(Roles = "admin")]
 		[HttpDelete("{id:int}", Name = "DeleteCarNumber")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<APIResponse>> DeleteCarNumber(int id)
 		{
@@ -157,9 +162,11 @@ namespace AfriCar_AfriCarAPI.Controllers
 
 
 		//PUT
+		[Authorize(Roles = "admin")]
 		[HttpPut("{id:int}", Name = "UpdateCarNumber")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 
 		public async Task<ActionResult<APIResponse>> UpdateCarNumber(int id, [FromBody] CarNumberUpdateDTO updateDTO)
 		{
