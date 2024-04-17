@@ -16,50 +16,55 @@ namespace AfriCar_Web.Services
 			carUrl = configuration.GetValue<string>("ServiceUrls:CarAPI");
 		}
 
-		public Task<T> CreateAsync<T>(CarNumberCreateDTO dto)
+		public Task<T> CreateAsync<T>(CarNumberCreateDTO dto, string token)
 		{
 			return SendAsync<T>(new APIRequest()
 			{
 				ApiType = SD.ApiType.POST,
 				Data = dto,
-				Url = carUrl + "/api/carNumberAPI"
+				Url = carUrl + "/api/carNumberAPI",
+				Token = token
 			});
 		}
 
-		public Task<T> DeleteAsync<T>(int id)
+		public Task<T> DeleteAsync<T>(int id, string token)
 		{
 			return SendAsync<T>(new APIRequest()
 			{
 				ApiType = SD.ApiType.DELETE,
 				Url = carUrl + "/api/carNumberAPI/" + id,
+				Token = token
 			});
 		}
 
-		public Task<T> GetAllAsync<T>()
+		public Task<T> GetAllAsync<T>(string token)
 		{
 			return SendAsync<T>(new APIRequest()
 			{
 				ApiType = SD.ApiType.GET,
-				Url = carUrl + "/api/carNumberAPI"
+				Url = carUrl + "/api/carNumberAPI",
+				Token = token
 			});
 		}
 
-		public Task<T> GetAsync<T>(int id)
+		public Task<T> GetAsync<T>(int id, string token)
 		{
 			return SendAsync<T>(new APIRequest()
 			{
 				ApiType = SD.ApiType.GET,
-				Url = carUrl + "/api/carNumberAPI/" + id
+				Url = carUrl + "/api/carNumberAPI/" + id,
+				Token = token
 			});
 		}
 
-		public Task<T> UpdateAsync<T>(CarNumberUpdateDTO dto)
+		public Task<T> UpdateAsync<T>(CarNumberUpdateDTO dto, string token)
 		{
 			return SendAsync<T>(new APIRequest()
 			{
 				ApiType = SD.ApiType.PUT,
 				Data = dto,
 				Url = carUrl + "/api/carNumberAPI/" + dto.CarNo,
+				Token = token
 			});
 		}
 	}

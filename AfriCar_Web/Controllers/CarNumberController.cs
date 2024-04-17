@@ -1,8 +1,10 @@
-﻿using AfriCar_Web.Models;
+﻿using AfriCar_Utility;
+using AfriCar_Web.Models;
 using AfriCar_Web.Models.Dto;
 using AfriCar_Web.Models.VM;
 using AfriCar_Web.Services.IServices;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -27,7 +29,7 @@ namespace AfriCar_Web.Controllers
 		{
 			List<CarNumberDTO> list = new();
 
-			var response = await _carNumberService.GetAllAsync<APIResponse>();
+			var response = await _carNumberService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
 			if (response != null && response.isSuccess)
 			{
 				list = JsonConvert.DeserializeObject<List<CarNumberDTO>>(Convert.ToString(response.Result));
@@ -36,10 +38,11 @@ namespace AfriCar_Web.Controllers
 			return View(list);
 		}
 
+		[Authorize(Roles = "admin")]
 		public async Task<IActionResult> CreateCarNumber()
 		{
 			CarNumberCreateVM carNumberVM = new CarNumberCreateVM();
-			var response = await _carService.GetAllAsync<APIResponse>();
+			var response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
 			if (response != null && response.isSuccess)
 			{
 				carNumberVM.CarList = JsonConvert.DeserializeObject<List<CarDTO>>(Convert.ToString(response.Result)).Select(x => new SelectListItem
@@ -55,13 +58,26 @@ namespace AfriCar_Web.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[Authorize(Roles = "admin")]
 		public async Task<IActionResult> CreateCarNumber(CarNumberCreateVM model)
 		{
+			var res = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
+			if (res != null && res.isSuccess)
+			{
+				model.CarList = JsonConvert.DeserializeObject<List<CarDTO>>(Convert.ToString(res.Result)).Select(x => new SelectListItem
+				{
+					Text = x.Name,
+					Value = x.Id.ToString(),
+
+				});
+			}
+
 			if (ModelState.IsValid)
 			{
-				var response = await _carNumberService.CreateAsync<APIResponse>(model.CarNumber);
+				var response = await _carNumberService.CreateAsync<APIResponse>(model.CarNumber, HttpContext.Session.GetString(SD.SessionToken));
 				if (response != null && response.isSuccess)
 				{
+					TempData["success"] = "Car Number Created Successfully!";
 					return RedirectToAction(nameof(IndexCarNumber));
 				}
 				else
@@ -72,15 +88,17 @@ namespace AfriCar_Web.Controllers
 					}
 				}
 			}
+			TempData["error"] = "Error encountered";
 			return View(model);
 
 		}
 
+		[Authorize(Roles = "admin")]
 		public async Task<IActionResult> UpdateCarNumber(int carId)
 		{
 			CarNumberUpdateVM carNumberUpdateVM = new CarNumberUpdateVM();
 
-			var response = await _carNumberService.GetAsync<APIResponse>(carId);
+			var response = await _carNumberService.GetAsync<APIResponse>(carId, HttpContext.Session.GetString(SD.SessionToken));
 			if (response != null && response.isSuccess)
 			{
 				CarNumberDTO model = JsonConvert.DeserializeObject<CarNumberDTO>(Convert.ToString(response.Result));
@@ -88,7 +106,7 @@ namespace AfriCar_Web.Controllers
 				carNumberUpdateVM.CarNumber = _mapper.Map<CarNumberUpdateDTO>(model);
 			}
 
-			response = await _carService.GetAllAsync<APIResponse>();
+			response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
 			if (response != null && response.isSuccess)
 			{
 				carNumberUpdateVM.CarList = JsonConvert.DeserializeObject<List<CarDTO>>(Convert.ToString(response.Result)).Select(x => new SelectListItem
@@ -106,13 +124,15 @@ namespace AfriCar_Web.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[Authorize(Roles = "admin")]
 		public async Task<IActionResult> UpdateCarNumber(CarNumberUpdateVM model)
 		{
 			if (ModelState.IsValid)
 			{
-				var response = await _carNumberService.UpdateAsync<APIResponse>(model.CarNumber);
+				var response = await _carNumberService.UpdateAsync<APIResponse>(model.CarNumber, HttpContext.Session.GetString(SD.SessionToken));
 				if (response != null && response.isSuccess)
 				{
+					TempData["success"] = "Car Number Updated Successfully!";
 					return RedirectToAction(nameof(IndexCarNumber));
 				}
 				else
@@ -124,7 +144,7 @@ namespace AfriCar_Web.Controllers
 				}
 			}
 
-			var res = await _carService.GetAllAsync<APIResponse>();
+			var res = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
 			if (res != null && res.isSuccess)
 			{
 				model.CarList = JsonConvert.DeserializeObject<List<CarDTO>>(Convert.ToString(res.Result)).Select(x => new SelectListItem
@@ -135,14 +155,16 @@ namespace AfriCar_Web.Controllers
 				});
 			}
 
+			TempData["error"] = "Error encountered";
 			return View(model);
 		}
 
+		[Authorize(Roles = "admin")]
 		public async Task<IActionResult> DeleteCarNumber(int carId)
 		{
 			CarNumberDeleteVM carNumberDeleteVM = new CarNumberDeleteVM();
 
-			var response = await _carNumberService.GetAsync<APIResponse>(carId);
+			var response = await _carNumberService.GetAsync<APIResponse>(carId, HttpContext.Session.GetString(SD.SessionToken));
 			if (response != null && response.isSuccess)
 			{
 				CarNumberDTO model = JsonConvert.DeserializeObject<CarNumberDTO>(Convert.ToString(response.Result));
@@ -151,7 +173,7 @@ namespace AfriCar_Web.Controllers
 				return View(model);
 			}
 
-			response = await _carService.GetAllAsync<APIResponse>();
+			response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
 			if (response != null && response.isSuccess)
 			{
 				carNumberDeleteVM.CarList = JsonConvert.DeserializeObject<List<CarDTO>>(Convert.ToString(response.Result)).Select(x => new SelectListItem
@@ -168,11 +190,13 @@ namespace AfriCar_Web.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[Authorize(Roles = "admin")]
 		public async Task<IActionResult> DeleteCarNumber(CarNumberDeleteVM model)
 		{
-			var response = await _carNumberService.DeleteAsync<APIResponse>(model.CarNumber.CarNo);
+			var response = await _carNumberService.DeleteAsync<APIResponse>(model.CarNumber.CarNo, HttpContext.Session.GetString(SD.SessionToken));
 			if (response != null && response.isSuccess)
 			{
+				TempData["success"] = "Car Number Deleted Successfully!";
 				return RedirectToAction(nameof(IndexCarNumber));
 			}
 

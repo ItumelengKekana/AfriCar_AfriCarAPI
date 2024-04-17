@@ -1,4 +1,5 @@
-﻿using AfriCar_Web.Models;
+﻿using AfriCar_Utility;
+using AfriCar_Web.Models;
 using AfriCar_Web.Models.Dto;
 using AfriCar_Web.Services.IServices;
 using AutoMapper;
@@ -27,7 +28,7 @@ namespace AfriCar_Web.Controllers
 		{
 			List<CarDTO> list = new();
 
-			var response = await _carService.GetAllAsync<APIResponse>();
+			var response = await _carService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
 			if (response != null && response.isSuccess)
 			{
 				list = JsonConvert.DeserializeObject<List<CarDTO>>(Convert.ToString(response.Result));
