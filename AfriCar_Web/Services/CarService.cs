@@ -22,7 +22,7 @@ namespace AfriCar_Web.Services
 			{
 				ApiType = SD.ApiType.POST,
 				Data = dto,
-				Url = carUrl + "/api/carAPI",
+				Url = carUrl + "/api/v1/carAPI",
 				Token = token
 			});
 		}
@@ -32,7 +32,7 @@ namespace AfriCar_Web.Services
 			return SendAsync<T>(new APIRequest()
 			{
 				ApiType = SD.ApiType.DELETE,
-				Url = carUrl + "/api/carAPI/" + id,
+				Url = carUrl + "/api/v1/carAPI/" + id,
 				Token = token
 			});
 		}
@@ -42,7 +42,7 @@ namespace AfriCar_Web.Services
 			return SendAsync<T>(new APIRequest()
 			{
 				ApiType = SD.ApiType.GET,
-				Url = carUrl + "/api/carAPI",
+				Url = carUrl + "/api/v1/carAPI",
 				Token = token
 			});
 		}
@@ -52,7 +52,7 @@ namespace AfriCar_Web.Services
 			return SendAsync<T>(new APIRequest()
 			{
 				ApiType = SD.ApiType.GET,
-				Url = carUrl + "/api/carAPI/" + id,
+				Url = carUrl + "/api/v1/carAPI/" + id,
 				Token = token
 			});
 		}
@@ -63,7 +63,7 @@ namespace AfriCar_Web.Services
 			{
 				ApiType = SD.ApiType.PUT,
 				Data = dto,
-				Url = carUrl + "/api/carAPI/" + dto.Id,
+				Url = carUrl + "/api/v1/carAPI/" + dto.Id,
 				Token = token
 			});
 		}

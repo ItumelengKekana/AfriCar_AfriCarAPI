@@ -23,7 +23,7 @@ namespace AfriCar_Web.Services
 			{
 				ApiType = SD.ApiType.POST,
 				Data = obj,
-				Url = carUrl + "/api/UsersAuth/login"
+				Url = carUrl + "/api/v1/UsersAuth/login"
 			});
 		}
 
@@ -33,7 +33,7 @@ namespace AfriCar_Web.Services
 			{
 				ApiType = SD.ApiType.POST,
 				Data = obj,
-				Url = carUrl + "/api/UsersAuth/register"
+				Url = carUrl + "/api/v1/UsersAuth/register"
 			});
 		}
 	}

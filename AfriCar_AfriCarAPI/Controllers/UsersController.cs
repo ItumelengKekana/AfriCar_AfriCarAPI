@@ -1,14 +1,15 @@
 ﻿using AfriCar_AfriCarAPI.Models;
 using AfriCar_AfriCarAPI.Models.Dto;
 using AfriCar_AfriCarAPI.Repository.IRepository;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace AfriCar_AfriCarAPI.Controllers
 {
-	[Route("api/UsersAuth")]
+	[Route("api/v{version:apiVersion}/UsersAuth")]
 	[ApiController]
-	//[ApiVersionNeutral]
+	[ApiVersionNeutral]
 	public class UsersController : Controller
 	{
 		private readonly IUserRepository _userRepository;
