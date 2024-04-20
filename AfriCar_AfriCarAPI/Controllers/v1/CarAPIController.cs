@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Text.Json;
 
 namespace AfriCar_AfriCarAPI.Controllers.v1
 {
@@ -37,12 +38,35 @@ namespace AfriCar_AfriCarAPI.Controllers.v1
 		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public async Task<ActionResult<APIResponse>> GetCars()
+		public async Task<ActionResult<APIResponse>> GetCars([FromQuery(Name = "car max occupancy")] int? occupancy, [FromQuery] string? search, [FromQuery] string? releaseYear, int pageSize = 0, int pageNumber = 1)
 		{
 			try
 			{
 
-				IEnumerable<CarModel> carList = await _dbCar.GetAllAsync();
+				IEnumerable<CarModel> carList;
+
+				if (occupancy > 0)
+				{
+					carList = await _dbCar.GetAllAsync(u => u.Occupancy == occupancy, pageSize: pageSize, pageNumber: pageNumber);
+				}
+				else
+				{
+					carList = await _dbCar.GetAllAsync(pageSize: pageSize, pageNumber: pageNumber);
+				}
+
+				if (!string.IsNullOrEmpty(search))
+				{
+					carList = carList.Where(u => u.Name.ToLower().Contains(search.ToLower()));
+				}
+
+				if (!string.IsNullOrEmpty(releaseYear))
+				{
+					carList = carList.Where(u => u.ReleaseYear.Year.ToString() == releaseYear);
+				}
+
+				Pagination pagination = new Pagination() { PageNumber = pageNumber, PageSize = pageSize };
+
+				Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagination));
 				_response.Result = _mapper.Map<List<CarDTO>>(carList);
 				_response.StatusCode = HttpStatusCode.OK;
 				return Ok(_response);
