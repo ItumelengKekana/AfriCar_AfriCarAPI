@@ -4,6 +4,7 @@ using AfriCar_AfriCarAPI.Repository;
 using AfriCar_AfriCarAPI.Repository.IRepository;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -29,6 +30,11 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddControllers(option =>
 {
 	//option.ReturnHttpNotAcceptable = true;  //prevent the return type from being anything other than JSON
+	option.CacheProfiles.Add("Default30",
+		new CacheProfile()
+		{
+			Duration = 30
+		});
 }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();  //Adding support for xml data format
 																  // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
@@ -128,6 +134,8 @@ builder.Services.AddSwaggerGen(options =>
 		}
 	});
 });
+
+builder.Services.AddResponseCaching();
 
 
 var app = builder.Build();

@@ -13,226 +13,227 @@ using System.Net;
 
 namespace AfriCar_AfriCarAPI.Controllers.v1
 {
-    [Route("api/v{version:apiVersion}/CarAPI")]
-    [ApiController]
-    [ApiVersion("1.0")]
-    [ApiVersion("2.0")]
-    public class CarAPIController : ControllerBase
-    {
-        protected APIResponse _response;
-        private readonly ICarRepository _dbCar;
-        private readonly IMapper _mapper;
+	[Route("api/v{version:apiVersion}/CarAPI")]
+	[ApiController]
+	[ApiVersion("1.0")]
+	[ApiVersion("2.0")]
+	public class CarAPIController : ControllerBase
+	{
+		protected APIResponse _response;
+		private readonly ICarRepository _dbCar;
+		private readonly IMapper _mapper;
 
-        public CarAPIController(ICarRepository dbCar, IMapper mapper)
-        {
-            _dbCar = dbCar;
-            _mapper = mapper;
-            _response = new();
-        }
+		public CarAPIController(ICarRepository dbCar, IMapper mapper)
+		{
+			_dbCar = dbCar;
+			_mapper = mapper;
+			_response = new();
+		}
 
-        //GET
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetCars()
-        {
-            try
-            {
+		//GET
+		[HttpGet]
+		[ResponseCache(CacheProfileName = "Default30")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult<APIResponse>> GetCars()
+		{
+			try
+			{
 
-                IEnumerable<CarModel> carList = await _dbCar.GetAllAsync();
-                _response.Result = _mapper.Map<List<CarDTO>>(carList);
-                _response.StatusCode = HttpStatusCode.OK;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                _response.isSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.ToString() };
-            }
-            return _response;
-        }
+				IEnumerable<CarModel> carList = await _dbCar.GetAllAsync();
+				_response.Result = _mapper.Map<List<CarDTO>>(carList);
+				_response.StatusCode = HttpStatusCode.OK;
+				return Ok(_response);
+			}
+			catch (Exception ex)
+			{
+				_response.isSuccess = false;
+				_response.ErrorMessages = new List<string> { ex.ToString() };
+			}
+			return _response;
+		}
 
-        //GET Individual
-        [HttpGet("{id:int}", Name = "GetCar")] //This implies that an id is needed to avoid an ambiguity error
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetCar(int id)
-        {
-            if (id == 0)
-            {
-                _response.StatusCode = HttpStatusCode.BadRequest;
-                return BadRequest(_response);
-            }
+		//GET Individual
+		[HttpGet("{id:int}", Name = "GetCar")] //This implies that an id is needed to avoid an ambiguity error
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult<APIResponse>> GetCar(int id)
+		{
+			if (id == 0)
+			{
+				_response.StatusCode = HttpStatusCode.BadRequest;
+				return BadRequest(_response);
+			}
 
-            var car = await _dbCar.GetAsync(x => x.Id == id);
+			var car = await _dbCar.GetAsync(x => x.Id == id);
 
-            if (car == null)
-            {
-                return NotFound();
-            }
+			if (car == null)
+			{
+				return NotFound();
+			}
 
-            _response.Result = _mapper.Map<CarDTO>(car);
-            _response.StatusCode = HttpStatusCode.OK;
-            return Ok(_response);
-        }
-
-
-        //CREATE POST
-        [HttpPost]
-        [Authorize(Roles = "admin")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public async Task<ActionResult<APIResponse>> CreateCar([FromBody] CarCreateDTO createDTO)
-        {
-            try
-            {
+			_response.Result = _mapper.Map<CarDTO>(car);
+			_response.StatusCode = HttpStatusCode.OK;
+			return Ok(_response);
+		}
 
 
-                if (await _dbCar.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
-                {
-                    ModelState.AddModelError("CustomError", "Car already exists");
-                    return BadRequest(ModelState);
-                }
+		//CREATE POST
+		[HttpPost]
+		[Authorize(Roles = "admin")]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-                if (createDTO == null)
-                {
-                    return BadRequest(createDTO);
-                }
-
-                CarModel carModel = _mapper.Map<CarModel>(createDTO);
-
-                await _dbCar.CreateAsync(carModel);
-                _response.Result = _mapper.Map<CarDTO>(carModel);
-                _response.StatusCode = HttpStatusCode.Created;
-
-                return CreatedAtRoute("GetCar", new { id = carModel.Id }, _response);
-            }
-            catch (Exception ex)
-            {
-                _response.isSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.ToString() };
-            }
-            return _response;
-        }
+		public async Task<ActionResult<APIResponse>> CreateCar([FromBody] CarCreateDTO createDTO)
+		{
+			try
+			{
 
 
-        //DELETE
-        [HttpDelete("{id:int}", Name = "DeleteCar")]
-        [Authorize(Roles = "admin")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> DeleteCar(int id)
-        {
-            try
-            {
-                if (id == 0)
-                {
-                    return BadRequest(); //returns a status of 400 if id is 0
-                }
+				if (await _dbCar.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
+				{
+					ModelState.AddModelError("CustomError", "Car already exists");
+					return BadRequest(ModelState);
+				}
 
-                var car = await _dbCar.GetAsync(u => u.Id == id); //link expression to find the item using the id
+				if (createDTO == null)
+				{
+					return BadRequest(createDTO);
+				}
 
-                if (car == null)
-                {
-                    return NotFound(); //returns a status of 404 if the id does not match
-                }
+				CarModel carModel = _mapper.Map<CarModel>(createDTO);
 
-                await _dbCar.RemoveAsync(car); //remove the selected item
-                _response.StatusCode = HttpStatusCode.NoContent;
-                _response.isSuccess = true;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                _response.isSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.ToString() };
-            }
-            return _response;
-        }
+				await _dbCar.CreateAsync(carModel);
+				_response.Result = _mapper.Map<CarDTO>(carModel);
+				_response.StatusCode = HttpStatusCode.Created;
+
+				return CreatedAtRoute("GetCar", new { id = carModel.Id }, _response);
+			}
+			catch (Exception ex)
+			{
+				_response.isSuccess = false;
+				_response.ErrorMessages = new List<string> { ex.ToString() };
+			}
+			return _response;
+		}
 
 
-        //PUT
-        [Authorize(Roles = "admin")]
-        [HttpPut("{id:int}", Name = "UpdateCar")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+		//DELETE
+		[HttpDelete("{id:int}", Name = "DeleteCar")]
+		[Authorize(Roles = "admin")]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<APIResponse>> DeleteCar(int id)
+		{
+			try
+			{
+				if (id == 0)
+				{
+					return BadRequest(); //returns a status of 400 if id is 0
+				}
 
-        public async Task<ActionResult<APIResponse>> UpdateCar(int id, [FromBody] CarUpdateDTO updateDTO)
-        {
-            try
-            {
+				var car = await _dbCar.GetAsync(u => u.Id == id); //link expression to find the item using the id
 
-                if (updateDTO == null || id != updateDTO.Id)
-                {
-                    return BadRequest();
-                }
+				if (car == null)
+				{
+					return NotFound(); //returns a status of 404 if the id does not match
+				}
 
-                CarModel model = _mapper.Map<CarModel>(updateDTO);
-
-                await _dbCar.UpdateAsync(model);
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.isSuccess = true;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                _response.isSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.ToString() };
-            }
-            return _response;
-        }
-
-
-        //PATCH
-        [Authorize(Roles = "admin")]
-        [HttpPatch("{id:int}", Name = "UpdatePartialCar")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdatePartialCar(int id, JsonPatchDocument<CarUpdateDTO> patchCar)
-        {
-            if (patchCar == null || id == 0)
-            {
-                return BadRequest();
-            }
-
-            var car = await _dbCar.GetAsync(x => x.Id == id, tracked: false);
-
-            CarUpdateDTO carUpdateDTO = _mapper.Map<CarUpdateDTO>(car);
+				await _dbCar.RemoveAsync(car); //remove the selected item
+				_response.StatusCode = HttpStatusCode.NoContent;
+				_response.isSuccess = true;
+				return Ok(_response);
+			}
+			catch (Exception ex)
+			{
+				_response.isSuccess = false;
+				_response.ErrorMessages = new List<string> { ex.ToString() };
+			}
+			return _response;
+		}
 
 
-            if (car == null)
-            {
-                return BadRequest();
-            }
+		//PUT
+		[Authorize(Roles = "admin")]
+		[HttpPut("{id:int}", Name = "UpdateCar")]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status403Forbidden)]
 
-            patchCar.ApplyTo(carUpdateDTO, ModelState);
+		public async Task<ActionResult<APIResponse>> UpdateCar(int id, [FromBody] CarUpdateDTO updateDTO)
+		{
+			try
+			{
 
-            //converting CarUpdateDTO back to Car in order to save to the database
-            CarModel carModel = _mapper.Map<CarModel>(carUpdateDTO);
+				if (updateDTO == null || id != updateDTO.Id)
+				{
+					return BadRequest();
+				}
+
+				CarModel model = _mapper.Map<CarModel>(updateDTO);
+
+				await _dbCar.UpdateAsync(model);
+				_response.StatusCode = HttpStatusCode.OK;
+				_response.isSuccess = true;
+				return Ok(_response);
+			}
+			catch (Exception ex)
+			{
+				_response.isSuccess = false;
+				_response.ErrorMessages = new List<string> { ex.ToString() };
+			}
+			return _response;
+		}
 
 
-            await _dbCar.UpdateAsync(carModel);  //updating the appropriate model bound to the database
+		//PATCH
+		[Authorize(Roles = "admin")]
+		[HttpPatch("{id:int}", Name = "UpdatePartialCar")]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<IActionResult> UpdatePartialCar(int id, JsonPatchDocument<CarUpdateDTO> patchCar)
+		{
+			if (patchCar == null || id == 0)
+			{
+				return BadRequest();
+			}
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+			var car = await _dbCar.GetAsync(x => x.Id == id, tracked: false);
 
-            return NoContent();
-        }
-    }
+			CarUpdateDTO carUpdateDTO = _mapper.Map<CarUpdateDTO>(car);
+
+
+			if (car == null)
+			{
+				return BadRequest();
+			}
+
+			patchCar.ApplyTo(carUpdateDTO, ModelState);
+
+			//converting CarUpdateDTO back to Car in order to save to the database
+			CarModel carModel = _mapper.Map<CarModel>(carUpdateDTO);
+
+
+			await _dbCar.UpdateAsync(carModel);  //updating the appropriate model bound to the database
+
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			return NoContent();
+		}
+	}
 }
