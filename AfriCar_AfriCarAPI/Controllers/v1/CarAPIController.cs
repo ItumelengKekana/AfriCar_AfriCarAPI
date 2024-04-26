@@ -80,7 +80,7 @@ namespace AfriCar_AfriCarAPI.Controllers.v1
 		}
 
 		//GET Individual
-		[HttpGet("{id:int}", Name = "GetCar")] //This implies that an id is needed to avoid an ambiguity error
+		[HttpGet("{id:int}", Name = "GetCar")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -105,7 +105,6 @@ namespace AfriCar_AfriCarAPI.Controllers.v1
 			_response.StatusCode = HttpStatusCode.OK;
 			return Ok(_response);
 		}
-
 
 		//CREATE POST
 		[HttpPost]
@@ -221,43 +220,5 @@ namespace AfriCar_AfriCarAPI.Controllers.v1
 			return _response;
 		}
 
-
-		//PATCH
-		[Authorize(Roles = "admin")]
-		[HttpPatch("{id:int}", Name = "UpdatePartialCar")]
-		[ProducesResponseType(StatusCodes.Status204NoContent)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public async Task<IActionResult> UpdatePartialCar(int id, JsonPatchDocument<CarUpdateDTO> patchCar)
-		{
-			if (patchCar == null || id == 0)
-			{
-				return BadRequest();
-			}
-
-			var car = await _dbCar.GetAsync(x => x.Id == id, tracked: false);
-
-			CarUpdateDTO carUpdateDTO = _mapper.Map<CarUpdateDTO>(car);
-
-
-			if (car == null)
-			{
-				return BadRequest();
-			}
-
-			patchCar.ApplyTo(carUpdateDTO, ModelState);
-
-			//converting CarUpdateDTO back to Car in order to save to the database
-			CarModel carModel = _mapper.Map<CarModel>(carUpdateDTO);
-
-
-			await _dbCar.UpdateAsync(carModel);  //updating the appropriate model bound to the database
-
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-
-			return NoContent();
-		}
 	}
 }

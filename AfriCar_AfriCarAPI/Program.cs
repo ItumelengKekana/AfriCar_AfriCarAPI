@@ -29,7 +29,6 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddControllers(option =>
 {
-	//option.ReturnHttpNotAcceptable = true;  //prevent the return type from being anything other than JSON
 	option.CacheProfiles.Add("Default30",
 		new CacheProfile()
 		{

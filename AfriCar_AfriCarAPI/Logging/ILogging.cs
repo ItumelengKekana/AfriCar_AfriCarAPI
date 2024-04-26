@@ -1,4 +1,7 @@
-﻿namespace AfriCar_AfriCarAPI.Logging
+﻿/* Log - this method logs the message during operation depending on its type 
+ */
+
+namespace AfriCar_AfriCarAPI.Logging
 {
 	public interface ILogging
 	{

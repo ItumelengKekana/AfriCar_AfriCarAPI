@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
+/* This is version 2.0 of the controller added for extensibility and to learn API versioning
+*/
+
 namespace AfriCar_AfriCarAPI.Controllers.v2
 {
     [Route("api/v{version:apiVersion}/CarNumberAPI")]
