@@ -25,6 +25,7 @@ namespace AfriCar_Web.Controllers
 			_mapper = mapper;
 		}
 
+		//GET
 		public async Task<IActionResult> IndexCarNumber()
 		{
 			List<CarNumberDTO> list = new();
@@ -38,6 +39,7 @@ namespace AfriCar_Web.Controllers
 			return View(list);
 		}
 
+		//GET
 		[Authorize(Roles = "admin")]
 		public async Task<IActionResult> CreateCarNumber()
 		{
@@ -55,7 +57,7 @@ namespace AfriCar_Web.Controllers
 			return View(carNumberVM);
 		}
 
-
+		//POST
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Roles = "admin")]
@@ -93,6 +95,7 @@ namespace AfriCar_Web.Controllers
 
 		}
 
+		//GET
 		[Authorize(Roles = "admin")]
 		public async Task<IActionResult> UpdateCarNumber(int carId)
 		{
@@ -121,7 +124,7 @@ namespace AfriCar_Web.Controllers
 			return NotFound();
 		}
 
-
+		//POST
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Roles = "admin")]
@@ -159,6 +162,7 @@ namespace AfriCar_Web.Controllers
 			return View(model);
 		}
 
+		//GET
 		[Authorize(Roles = "admin")]
 		public async Task<IActionResult> DeleteCarNumber(int carId)
 		{
@@ -188,6 +192,7 @@ namespace AfriCar_Web.Controllers
 			return NotFound();
 		}
 
+		//POST
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Roles = "admin")]

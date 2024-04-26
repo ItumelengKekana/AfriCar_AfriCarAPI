@@ -1,6 +1,8 @@
 ﻿using System.Security.AccessControl;
 using static AfriCar_Utility.SD;
 
+/* The default http request is set as GET*/
+
 namespace AfriCar_Web.Models
 {
 	public class APIRequest

@@ -8,6 +8,15 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using AfriCar_Web.Models;
 
+/* This controller contains the following action methods:
+ * Login (GET) - returns the view to the login page
+ * Login (POST) - allows a user to login
+ * Register (GET) - returns the view to the register page
+ * Register (POST) - allows a user to register
+ * Logout - allows a user to log out/sign out
+ * AccessDenied - returns the view to the access denied page when authorization is denied 
+*/
+
 namespace AfriCar_Web.Controllers
 {
 	public class AuthController : Controller
@@ -18,6 +27,7 @@ namespace AfriCar_Web.Controllers
 			_authService = authService;
 		}
 
+		//GET
 		[HttpGet]
 		public IActionResult Login()
 		{
@@ -26,6 +36,7 @@ namespace AfriCar_Web.Controllers
 			return View(obj);
 		}
 
+		//POST
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Login(LoginRequestDTO obj)
@@ -54,12 +65,14 @@ namespace AfriCar_Web.Controllers
 
 		}
 
+		//GET
 		[HttpGet]
 		public IActionResult Register()
 		{
 			return View();
 		}
 
+		//POST
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Register(RegistrationRequestDTO obj)
@@ -73,6 +86,7 @@ namespace AfriCar_Web.Controllers
 			return View();
 		}
 
+		//GET
 		[HttpGet]
 		public async Task<IActionResult> Logout()
 		{
@@ -81,6 +95,7 @@ namespace AfriCar_Web.Controllers
 			return RedirectToAction("Index", "Home");
 		}
 
+		//GET
 		[HttpGet]
 		public IActionResult AccessDenied()
 		{
