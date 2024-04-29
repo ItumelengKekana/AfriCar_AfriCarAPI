@@ -18,6 +18,8 @@ namespace AfriCar_AfriCarAPI
 			CreateMap<CarNumberModel, CarNumberCreateDTO>().ReverseMap();
 			CreateMap<CarNumberModel, CarNumberUpdateDTO>().ReverseMap();
 
+			CreateMap<ApplicationUser, UserDTO>().ReverseMap();
+
 		}
 	}
 }

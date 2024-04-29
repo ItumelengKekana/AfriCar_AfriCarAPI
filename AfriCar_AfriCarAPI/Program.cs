@@ -1,9 +1,11 @@
 using AfriCar_AfriCarAPI;
 using AfriCar_AfriCarAPI.Data;
+using AfriCar_AfriCarAPI.Models;
 using AfriCar_AfriCarAPI.Repository;
 using AfriCar_AfriCarAPI.Repository.IRepository;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -18,6 +20,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
 	option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
 
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 
